@@ -18,3 +18,14 @@ body {
   height: 100vh;
   color: white;
 }
+
+
+::-webkit-scrollbar {
+  display: none;
+}
+html {
+  scrollbar-width: none;
+}
+body {
+  overflow-y: scroll;
+}
