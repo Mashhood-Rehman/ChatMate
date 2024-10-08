@@ -8,7 +8,7 @@ const ChatList = () => {
         <div className=" flex justify-between items-center ">
 
         <div className="flex relative bg-[rgba(17,25,40,0.5)] space-x-10 p-1 ml-2 rounded-2xl">
-  <img src="/search.png" alt="" className="absolute bottom-2 left-2 h-8 w-8" height={10} width={10} />
+  <img src="/search.png" alt="" className="absolute bottom-3 left-2 h-6 w-6" height={10} width={10} />
   <input type="text" placeholder="Search.." className="p-2 rounded-xl bg-transparent border-none focus:outline-none" />
 </div>
 

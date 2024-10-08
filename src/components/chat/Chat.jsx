@@ -49,7 +49,6 @@ const Chat = () => {
           </div>
         </div>
 
-        {/* Icons */}
         <div className="flex space-x-4 p-2">
           <img
             src="/phone.png"
