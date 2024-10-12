@@ -3,6 +3,7 @@ import Signup from './Signup';
 import { motion } from 'framer-motion'; 
 import Login from './login';
 import { toast } from 'react-toastify';
+import Notifications from '../Notifications/Notifications';
 
 const AuthPage = () => {
   const [showLogin, setShowLogin] = useState(true);
@@ -41,6 +42,7 @@ const AuthPage = () => {
           {showLogin ? <Login handleLogin={handleLogin} toggleForm={toggleForm} /> : <Signup handleLogin={handleLogin} toggleForm={toggleForm} />}
         </motion.div>
       </div>
+      <Notifications />
     </div>
   );
 };

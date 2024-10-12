@@ -2,9 +2,10 @@ import Chat from "./components/chat/chat"
 import Detail from "./components/detail/Detail"
 import List from "./components/list/list"
 import AuthPage from "./components/Auth/AuthPage"
+import Notifications from "./components/Notifications/Notifications"
 const App = () => {
 
-  const user = false
+  const user = true
   return (
     <div className="" >
 {
@@ -14,6 +15,7 @@ const App = () => {
       <List />
       <Chat />
       <Detail />
+
     </div>
     </>
   )
@@ -24,6 +26,7 @@ const App = () => {
     )
 }
     </div>
+
   )
 }
 

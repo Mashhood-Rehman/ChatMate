@@ -43,7 +43,7 @@ const Login = ({ toggleForm  , handleLogin}) => {
 
       <div className="mt-12">
         <button
-          type="button"
+          type="submit"
           className="w-full py-3 px-6 text-sm font-semibold tracking-wider rounded-full text-white bg-gray-800 hover:bg-[#222] focus:outline-none"
         >
           Sign in
