@@ -2,10 +2,9 @@ import Chat from "./components/chat/chat"
 import Detail from "./components/detail/Detail"
 import List from "./components/list/list"
 import AuthPage from "./components/Auth/AuthPage"
-import Notifications from "./components/Notifications/Notifications"
 const App = () => {
 
-  const user = true
+  const user = false
   return (
     <div className="" >
 {
