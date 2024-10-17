@@ -6,8 +6,8 @@ const validator = require("validator")
 
 //signup
 const createUser = async (req ,res) => {
-    const { email, password, firstname, lastname } = req.body;
-const hashpassword = bcrypt.hash(password ,12)
+    const { email, password, firstname, lastname , image } = req.body;
+const hashpassword = await bcrypt.hash(password ,12)
 
 try {
            
@@ -23,22 +23,77 @@ try {
             lastname,
             email,
             password: hashpassword,
+            image
         });
         userRegister.save()
-        res.json({success:true })
+
+
+            const token = jwt.sign({
+                id:userRegister._id , email: userRegister.email
+            },
+        process.env.JWT_SECRET_KEY ,
+    {expiresIn: "1h"})
+
         res.status(201).json({
           success: true,
           message: "Account created successfully!",
-          userRegister,
+          user:userRegister,
+          token:token
+
         });
 
 
-} catch (error) {
+}  catch (error) {
     res.status(500).json({ success: false, error: error.message });
-} 
+  }
 
+  
 }
 
 
 
-module.exports= {createUser }
+//login 
+const login = async (req,res) => {
+    const {email , password} = req.body
+        try {
+           if(!email && !password) {
+            return res.status(400).json({success:false , message: " All fields required"})
+           }
+           const user = await userModel.findOne({email})
+           if(!user) {
+            return res.status(400).json({success:false , message:"User not Found"})
+           } 
+           const ispasswordValid =  bcrypt.compare(password , user.password) 
+           if(!ispasswordValid) {
+            return res.status(400).json({success:false , message : "Incorrect Password"})
+           } 
+
+
+           const token = jwt.sign(
+            { id: user._id, email: user.email }, 
+            process.env.JWT_SECRET_KEY, 
+            { expiresIn: "1h" }
+        );
+
+        res.status(200).json({success:true , message: "Logged In successfully" , token:token},
+            
+        )
+
+       
+        } catch (error) {
+            return res.status(400).json({success:false  , error: error.message})
+        }
+           }
+
+
+           const GetAllUsers = async (req,res) => {
+            try {
+                    const AllUsers = await userModel.find()
+                return    res.status(200).json({success:true , message: "All Users fetched successfully" , AllUsers})
+            } catch (error) {
+                    return res.status(400).json({success:false , error:error.message})
+            }
+           }
+           
+
+module.exports= {createUser , login , GetAllUsers }

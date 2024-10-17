@@ -1,86 +1,100 @@
-import { useState } from "react";
-import Notifications from "../Notifications/Notifications";
+import { useState, useEffect } from "react";
+import axios from 'axios';
 
-const Signup = ({ toggleForm , handleLogin }) => {
+const Signup = ({ toggleForm, handleLogin }) => {
 
+  useEffect(() => {
+    fetchData();  // Call fetchData when component loads
+  }, []);
 
-   const [image, setImage] = useState(null);
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/createUser");
+      console.log(response.data); 
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const [showPassword, setShowPassword] = useState(false); 
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+
+  const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       setImage(file);
-      
-      // Create a preview of the image
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);  // Read file as a base64 URL
+      reader.onloadend = () => setImagePreview(reader.result);
+      reader.readAsDataURL(file);
     }
   };
 
-  
+  const handleImageUpload = async () => {
+    if (!image) return;
+    const formData = new FormData();
+    formData.append('image', image);
+
+    try {
+      const response = await axios.post('http://localhost:5000/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      console.log('Image uploaded successfully:', response.data);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+  };
+
   return (
-    <form onSubmit={handleLogin} className="max-w-lg w-full mx-auto">
+    <form onSubmit={handleLogin} className="max-w-lg w-full mx-auto bg-white shadow p-4 rounded-xl">
       <div className="mb-12">
         <h3 className="text-gray-800 text-4xl font-extrabold">Sign up</h3>
         <p className="text-gray-800 text-sm mt-4">
           Already have an account?{" "}
-          <span
-            className="text-blue-600 font-semibold hover:underline ml-1 cursor-pointer"
-            onClick={toggleForm}
-          >
+          <span className="text-blue-600 font-semibold hover:underline ml-1 cursor-pointer" onClick={toggleForm}>
             Sign in here
           </span>
         </p>
       </div>
 
       <div>
-      <form onSubmit={handleLogin}>
-        <input 
-        className="bg-[rgba(17,25,40,0.75)] rounded-2xl"
-          type="file" 
-          accept="image/*" 
-          onChange={handleImageChange} 
+        <input
+          className="bg-[rgba(17,25,40,0.75)] text-black rounded-2xl"
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
         />
-      </form>
-
-      {imagePreview && (
-        <div>
-          <h3 className="">Image Preview:</h3>
-          <img src={imagePreview} alt="Selected" className="h-16 w-16 rounded-full object-contain "  />
-        </div>
-      )}
-    </div>
-      <div>
-        <label className="text-gray-800 text-xs block mb-2">Name</label>
-        <div className="relative flex items-center">
-          <input
-            name="text"
-            type="text"
-            required
-            className="w-full text-sm border-b border-gray-300 focus:border-gray-800 px-2 py-3 outline-none"
-            placeholder="Your Name.."
-          />
-        </div>
+        {imagePreview && (
+          <div>
+            <h3 className="">Image Preview:</h3>
+            <img src={imagePreview} alt="Selected" className="h-16 w-16 rounded-full object-contain" />
+          </div>
+        )}
       </div>
 
+      <div>
+        <label className="text-gray-800 text-xs block mb-2">Name</label>
+        <input
+          name="name"
+          type="text"
+          required
+          className="w-full text-sm border-b border-gray-300 text-black focus:border-gray-800 px-2 py-3 outline-none"
+          placeholder="Your Name.."
+        />
+      </div>
 
-  
-      <div className="mt-8">
+      <div className="mt-8 flex items-center justify-center">
         <label className="text-gray-800 text-xs block mb-2">Email</label>
-        <div className="relative flex items-center">
-          <input
-            name="email"
-            type="text"
-            required
-            className="w-full text-sm border-b  text-black   border-gray-300 focus:border-gray-800 px-2 py-3 outline-none"
-            placeholder="Enter email"
-          />
-          <img src="/Email.png" alt="email" className="h-4 w-4" />
-        </div>
+        <input
+          name="email"
+          type="email"
+          required
+          className="w-full text-sm border-b text-black border-gray-300 focus:border-gray-800 px-2 py-3 outline-none"
+          placeholder="Enter email"
+        />
+        <img src="/Email.png" alt="email" className="h-4 w-4" />
       </div>
 
       <div className="mt-8">
@@ -88,12 +102,17 @@ const Signup = ({ toggleForm , handleLogin }) => {
         <div className="relative flex items-center">
           <input
             name="password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             required
-            className="w-full text-black text-sm border-b border-gray-300 focus:border-gray-800 px-2 py-3 outline-none"
+            className="w-full text-sm border-b text-black border-gray-300 focus:border-gray-800 px-2 py-3 outline-none"
             placeholder="Enter password"
           />
-          <img src="/password-show.png" alt="password" className="h-4 w-4" />
+          <img
+            src={showPassword ? "/password-hide.png" : "/password-show.png"}
+            alt="toggle password visibility"
+            className="h-4 w-4 cursor-pointer absolute right-2"
+            onClick={togglePasswordVisibility}
+          />
         </div>
       </div>
 
@@ -105,7 +124,6 @@ const Signup = ({ toggleForm , handleLogin }) => {
           Sign up
         </button>
       </div>
-      <Notifications/>
     </form>
   );
 };
