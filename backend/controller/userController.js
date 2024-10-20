@@ -18,12 +18,13 @@ try {
         if(!validator.isEmail(email)) {
             return res.json({success:false , message : "Enter valid email"})
         }
+        const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
         const userRegister = new userModel({
             firstname,
             lastname,
             email,
             password: hashpassword,
-            image
+            image:imagePath
         });
         userRegister.save()
 
@@ -75,7 +76,10 @@ const login = async (req,res) => {
             { expiresIn: "1h" }
         );
 
-        res.status(200).json({success:true , message: "Logged In successfully" , token:token},
+        res.status(200).json({success:true , message: "Logged In successfully" , token:token ,   user: {
+            firstname: user.firstname,
+            lastname: user.lastname
+        }},
             
         )
 

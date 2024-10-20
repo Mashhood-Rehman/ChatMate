@@ -1,22 +1,25 @@
 import { useState } from "react";
 import Login from "./Login";
 import Signup from "./Signup";
-
-const AuthPage = () => {
-  // State to track which form is visible, initially showing the login form
+import { useDispatch } from 'react-redux'; 
+import {setUser} from '../../store/authSlice'
+const AuthPage = ({ setToken }) => {
+  const dispatch = useDispatch();
   const [isLogin, setIsLogin] = useState(true);
 
-  // Function to toggle between the forms
   const toggleForm = () => {
-    setIsLogin((prevIsLogin) => !prevIsLogin); // Toggles the boolean value
+    setIsLogin((prevIsLogin) => !prevIsLogin); 
+  };
+  const handleLogin = (userData, token) => {
+    dispatch(setUser({ user: userData, token }));
   };
 
   return (
     <div>
       {isLogin ? (
-        <Login toggleForm={toggleForm} />
+        <Login toggleForm={toggleForm} handleLogin={handleLogin} setToken={setToken} />
       ) : (
-        <Signup toggleForm={toggleForm} />
+        <Signup toggleForm={toggleForm} setToken={setToken} />
       )}
     </div>
   );
