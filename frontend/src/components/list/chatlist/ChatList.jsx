@@ -16,7 +16,7 @@ const ChatList = () => {
     if (error) return <p>Error loading users: {error}</p>;
 
   
-    const allUsers = users?.allUsers || []
+    const allUsers = users?.AllUsers || [] 
 
     return (
         <div>
@@ -48,7 +48,6 @@ const ChatList = () => {
                 </div>
             </div>
 
-            {/* Rendering the list of users */}
             <div>
                 {allUsers.map((user) => (
                     <div key={user._id} className="flex items-center space-x-4 border-b-2 border-[#dddddd35]">
