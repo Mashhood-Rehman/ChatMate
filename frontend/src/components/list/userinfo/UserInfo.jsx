@@ -1,13 +1,11 @@
 import { useSelector } from "react-redux";
 
 const UserInfo = () => {
-  // Select the logged-in user from the Redux store
-  const loggedInUser = useSelector((state) => state.users.users.AllUsers);
-  console.log(loggedInUser)
+  const loggedInUser = useSelector((state) => state.users.loggedInUser); // Access logged-in user
+  console.log(loggedInUser);
 
-  // Fallback to default values if loggedInUser is null (e.g., not logged in yet)
-  const profilePicture = loggedInUser?.profilePicture || "default-avatar.png";
-  const firstname = loggedInUser?.firstname || "Guest";
+  const profilePicture = loggedInUser?.image || "default-avatar.png"; // Use 'image' from user data
+  const firstname = loggedInUser?.firstname || "Guest"; // Use 'firstname' from user data
 
   return (
     <div>
@@ -20,7 +18,7 @@ const UserInfo = () => {
             height={10}
             width={10}
           />
-          <h1>{firstname}</h1> {/* Display the user's firstname */}
+          <h1>{firstname}</h1> 
         </div>
         <div className="flex space-x-3 p-2">
           <img

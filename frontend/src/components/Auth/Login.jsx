@@ -3,48 +3,50 @@ import { Icon } from '@iconify/react';
 import axios from 'axios';  
 import { toast } from 'react-toastify';  
 import { useNavigate } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
+import { loginUser} from "../../store/userSlice";
 const Login = ({ toggleForm, setToken }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   
-  // useStates
   const [showPassword, setShowPassword] = useState(false); 
-  const [user, setUser] = useState({
+  const [user, setUserState] = useState({
     email: "",
     password: ""
   });
 
-  // Show Password
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  // Axios login request
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await axios.post('http://localhost:5000/login', user);
-        if (response.data.success) {
-            const { firstname, lastname } = response.data.user; 
-            
-            localStorage.setItem("token", response.data.token);
-            setToken(response.data.token); 
-            
-            toast.success(`Welcome ${firstname} ${lastname}`);
-            
-            navigate('/chat');
-        }
-    } catch (error) {
-        console.error(error);
-        toast.error("Error occurred: " + error.message);
-    }
-};
-
+      const response = await axios.post('http://localhost:5000/login', user);
+      if (response.data.success) {
+        const { firstname, lastname, image } = response.data.user;
   
-  // Handle change function
+        localStorage.setItem("token", response.data.token);
+        setToken(response.data.token);
+  
+        // Prepare user data
+        let userData = { firstname, lastname, image };
+        dispatch(loginUser(userData)); // This dispatches the login action
+  
+        toast.success(`Welcome ${firstname} ${lastname}`);
+        navigate('/chat');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Error occurred: " + error.message);
+    }
+  };
+  
+  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
+    setUserState({ ...user, [name]: value });
   };
   
   return (
