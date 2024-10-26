@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { Icon } from '@iconify/react'; 
-import axios from 'axios';  
 import { toast } from 'react-toastify';  
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginUser} from "../../store/userSlice";
+import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 const Login = ({ toggleForm, setToken }) => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false); 
   const [user, setUserState] = useState({
     email: "",
@@ -28,7 +27,7 @@ const Login = ({ toggleForm, setToken }) => {
   
         localStorage.setItem("token", response.data.token);
         setToken(response.data.token);
-  
+        
         // Prepare user data
         let userData = { firstname, lastname, image };
         dispatch(loginUser(userData)); // This dispatches the login action
@@ -36,6 +35,13 @@ const Login = ({ toggleForm, setToken }) => {
         toast.success(`Welcome ${firstname} ${lastname}`);
         navigate('/chat');
       }
+
+
+      // let userCredentials = {
+      //   email : user.email ,
+      //   password : user.password
+      // }
+      // dispatch(loginUser(userCredentials))
     } catch (error) {
       console.error(error);
       toast.error("Error occurred: " + error.message);

@@ -53,7 +53,7 @@ const ChatList = () => {
                     <div key={user._id} className="flex items-center space-x-4 border-b-2 border-[#dddddd35]">
                         <div>
                             <img
-                                src="avatar.png"
+                            src={`http://localhost:5000/uploads/${user.image}`} 
                                 alt="avatar"
                                 className="h-16 w-16 rounded-full p-1"
                                 height={10}

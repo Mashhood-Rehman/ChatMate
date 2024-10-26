@@ -24,7 +24,7 @@
     //routes
     const userroutes = require("./router/userRoute")
     app.use("/" , userroutes)
-app.use("/uploads" , express.static(path.join(__dirname , "uploads")))
+    app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
     //port checked
     app.listen(port, ()=> {
