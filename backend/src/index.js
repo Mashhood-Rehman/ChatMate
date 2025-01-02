@@ -7,13 +7,14 @@ const port = process.env.PORT;
 const authRoutes = require("./routes/auth.route");
 const messageRoutes = require("./routes/message.route");
 const connectDB = require("./lib/db");
-const app = express();
+const { app, server } = require("./lib/socket");
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
-app.listen(port, () => {
+server.listen(port, () => {
   console.log("the port is running on");
   connectDB();
 });

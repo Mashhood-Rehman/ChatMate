@@ -1,6 +1,6 @@
 const Message = require("../models/message.model");
 const User = require("../models/user.model");
-
+const cloudinary = require("../lib/cloudinary.js");
 const getUsersForSidebar = async (req, res) => {
   try {
     const loggedInUser = req.user._id;
@@ -17,17 +17,18 @@ const getMessages = async (req, res) => {
   try {
     const { id: userToChatId } = req.params;
     const myId = req.user._id;
-    const messages = await Message.find;
-    ({
+
+    const messages = await Message.find({
       $or: [
         { senderId: myId, receiverId: userToChatId },
         { senderId: userToChatId, receiverId: myId },
       ],
     });
+
     res.status(200).json(messages);
   } catch (error) {
-    console.log("Error in getMessages Controller", error);
-    return res.status(500).json("Internal Server Error", error);
+    console.log("Error in getMessages controller: ", error.message);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -49,7 +50,7 @@ const sendMessage = async (req, res) => {
       text,
     });
     await newMessage.save();
-    res.status(200), json(newMessage);
+    res.status(200).json(newMessage);
   } catch (error) {
     console.log("Error in sendMessage controller", error);
     res.status(500).json({ message: "Internal Server Error" });
