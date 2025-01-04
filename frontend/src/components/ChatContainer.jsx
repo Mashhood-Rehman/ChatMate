@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessagesInput";
 import MessagesSkeleton from "./skeletons/MessagesSkeleton";
-import { useAuthStore } from "../store/useAuthStore";
+import { useAuthStore } from "../store/useAuthstore";
 import { formatMessageTime } from "../lib/utils";
 
 const ChatContainer = () => {
