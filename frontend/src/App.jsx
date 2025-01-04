@@ -5,11 +5,11 @@ import LoginPage from "./Pages/LoginPage";
 import SettingsPage from "./Pages/SettingsPage";
 import ProfilePage from "./Pages/ProfilePage";
 import SignUpPage from "./Pages/SignUpPage";
-import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
 import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
 import { useThemeStore } from "./store/useThemeStore";
+import { useAuthStore } from "./store/useAuthStore";
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
   console.log("online Users ", onlineUsers);
