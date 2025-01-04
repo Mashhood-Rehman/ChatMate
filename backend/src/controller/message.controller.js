@@ -1,6 +1,7 @@
 const Message = require("../models/message.model");
 const User = require("../models/user.model");
 const cloudinary = require("../lib/cloudinary.js");
+const { getReceiverSocketId, io } = require("../lib/socket.js");
 const getUsersForSidebar = async (req, res) => {
   try {
     const loggedInUser = req.user._id;
@@ -50,7 +51,12 @@ const sendMessage = async (req, res) => {
       text,
     });
     await newMessage.save();
-    res.status(200).json(newMessage);
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
+
+    res.status(201).json(newMessage);
   } catch (error) {
     console.log("Error in sendMessage controller", error);
     res.status(500).json({ message: "Internal Server Error" });
